@@ -12,7 +12,7 @@ import Logging
 fileprivate let dlog: Logger? = Logger(label: "LexerErrorEx")
 
 public extension LexerError {
-    public func asDict()->StringStringDictionary {
+    func asDict()->StringStringDictionary {
         var reasonStr = "Unknow"
         switch self.reason {
         case .invalidParameterToken(let str):
@@ -34,7 +34,7 @@ public extension LexerError {
     }
 }
 
-extension LexerError : JSONSerializable {
+extension LexerError : @retroactive JSONSerializable {
     
     // MARK: Coding keys
     enum CodingKeys : String, CodingKey, CaseIterable {

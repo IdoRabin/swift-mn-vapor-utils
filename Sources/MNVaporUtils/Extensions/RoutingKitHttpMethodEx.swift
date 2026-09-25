@@ -10,7 +10,7 @@ import Foundation
 import NIO
 import NIOHTTP1
 
-extension NIOHTTP1.HTTPMethod : Hashable {
+extension NIOHTTP1.HTTPMethod : @retroactive Hashable {
     // MARK: Hashable
     public func hash(into hasher: inout Hasher) {
         hasher.combine(self.rawValue)

@@ -115,7 +115,7 @@ public extension Fluent.Database {
         if let aT = T.self as? any MNDBEnum {
             enumName = aT.dbEnumName
         }
-        var allCases : [String] = T.allCases.map { acaseVal in
+        let allCases : [String] = T.allCases.map { acaseVal in
             var result = "\(acaseVal)"
             if let val = acaseVal as? any MNDBEnum {
                 result = val.dbCaseName

@@ -11,31 +11,31 @@ import Vapor
 import MNUtils
 
 public extension Vapor.Response {
-    public static func NotImplemented(description:String? = "Not implemented.")->Response {
-        let ax : String? = nil
+    static func NotImplemented(description:String? = "Not implemented.")->Response {
+        // let ax : String? = nil
         return Response(status: .notImplemented, // 501s
                         version: .http1_1,
                         headersNoUpdate: HTTPHeaders([]),
                         body: Body(stringLiteral: """
 HTTP \(HTTPResponseStatus.notImplemented)\nNot implemented:
-description: \(description)
+description: \(description.descOrNil)
 """))
     }
     
-    public var asMNError : MNError? {
+    var asMNError : MNError? {
         guard self.status != .ok else {
             return nil
         }
         
-        var reason = self.status.reasonPhrase ?? "Unknown error for response"
+        let reason = self.status.reasonPhrase //  ?? "Unknown error for response"
         return MNError(code: MNErrorCode(rawValue: Int(self.status.code))!, reason: reason)
     }
     
-    public var asMNErrorStruct : MNErrorStruct? {
+    var asMNErrorStruct : MNErrorStruct? {
         guard let mnError = self.asMNError else {
             return nil
         }
-        var errStruct = MNErrorStruct(mnError: mnError)
+        let errStruct = MNErrorStruct(mnError: mnError)
         // errStruct.update(originatingPath: )
         return errStruct
     }

@@ -11,11 +11,11 @@ import MNUtils
 
 public extension Vapor.Middleware {
     
-    public static func mnDefaultMiddlewareNameTransform(_ name:String)->String {
+    static func mnDefaultMiddlewareNameTransform(_ name:String)->String {
         return MNDBUtils.mnDefaultDBTypeNameTransform("\(name)")
     }
     
-    public var name : String {
+    var name : String {
         return Self.mnDefaultMiddlewareNameTransform("\(self)")
     }
 }
@@ -28,7 +28,7 @@ public extension Vapor.Middlewares {
         let arr = mirror.descendant("storage") as! [Middleware]
         
         // Use both name and raw saved value for comparisons
-        var names : [String] = [
+        let names : [String] = [
             name,
             MNDBUtils.mnDefaultDBTypeNameTransform(name)
         ]
@@ -44,7 +44,7 @@ public extension Vapor.Middlewares {
         }
     }
     
-    public var all : [Middleware] {
+    var all : [Middleware] {
         let mirror = Mirror(reflecting: self)
         let arr = mirror.descendant("storage") as! [Middleware]
         return arr

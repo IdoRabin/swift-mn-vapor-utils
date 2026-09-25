@@ -1,14 +1,10 @@
 //
-//  VaporFluentPSQLErrorEx.swift
+//  FluentPSQLErrorEx.swift
 //
 //
 // Created by Ido Rabin for Bricks on 17/1/2024.
 
-import Foundation
-import Fluent
-import FluentKit
 import FluentPostgresDriver
-import Vapor
 
 public extension PSQLError {
 

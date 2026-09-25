@@ -111,7 +111,7 @@ public class MNRoutingHistory : JSONSerializable, Hashable, CustomStringConverti
     /// - Parameter timeBackCutoff: Cutoff in seconds to the past, items older than this amout are ignored. Default is a cutoff of 5 seconds into the past.
     /// - Returns: the first history item encountered that contains an error within the limitations
     public func getLatestErrorItem(limit:Int = 2, timeBackCutoff:TimeInterval = 5)->MNRoutingHistoryItem? {
-        var index = 0
+        let index = 0
         for item in items.reversed() {
             if index >= limit {
                 return nil
@@ -207,8 +207,8 @@ public class MNRoutingHistory : JSONSerializable, Hashable, CustomStringConverti
         var result : MNRoutingHistoryItem? = nil
         if let aresult = self.findItem(req: req) {
             result = aresult
-            try result?.update(req: req, response: response, action: action)
-            dlogVerbose?.info("   Found history item \(result!.requestId) out of \(self.items.count) items")
+            let res = try result?.update(req: req, response: response, action: action)
+            dlogVerbose?.info("   Found history item \(result!.requestId) out of \(self.items.count) items. Result: \(res.descOrNil)")
         } else {
             result = try MNRoutingHistoryItem(req: req, response: response, action: action)
             
@@ -218,7 +218,8 @@ public class MNRoutingHistory : JSONSerializable, Hashable, CustomStringConverti
             // Update with deduced redirectFrom, if provided, and previous item was a redirectTo + referer etc:
             // We ferch the referer from the request and the redirectTo from the prvious history item, and deduce the redirectedFrom:
             if let redirectFrom = self.deduceRedirectFrom(item:result!, for: req, response: response) {
-                try result?.update(req: req, response: response, action: redirectFrom)
+                let res = try result?.update(req: req, response: response, action: redirectFrom)
+                dlogVerbose?.info("   Found history item (REDIRECTED) \(result!.requestId) out of \(self.items.count) items. Result: \(res.descOrNil)")
             }
         }
         guard let result = result else {
@@ -249,7 +250,7 @@ public class MNRoutingHistory : JSONSerializable, Hashable, CustomStringConverti
         var result : [String] = ["RouteHistory \(items.count) items"]
         
         self.items.forEachIndex { index, item in
-            var line = "\(String(index).paddingLeft(toLength: 2, withPad: " ")). HItem: \(item.shortdescription)"
+            let line = "\(String(index).paddingLeft(toLength: 2, withPad: " ")). HItem: \(item.shortdescription)"
             result.append(line)
         }
         return result
@@ -261,7 +262,7 @@ public extension Vapor.Request /* MNRoutingHistory / routing history */ {
     
     /// Route history for the session, accessible from the requst. Max recent history items can be specified and changed.
     /// NOTE: Requires vapor config of: app.middleware.use(app.sessions.middleware)
-    public var routeHistory : MNRoutingHistory? {
+    var routeHistory : MNRoutingHistory? {
         return self.routeHistory(maxItems: MNRoutingHistory.DEFAULT_MAX_ITEMS)
     }
     
@@ -288,7 +289,7 @@ public extension Vapor.Request /* MNRoutingHistory / routing history */ {
         
         // We assume result was found or created!
         guard let result = result else {
-            let msg = "MNRoutingHistory init / get failed for session id: \(self.session.id)"
+            let msg = "MNRoutingHistory init / get failed for session id: \(self.session.id.descOrNil)"
             dlog?.note("\(msg)")
             return nil
         }

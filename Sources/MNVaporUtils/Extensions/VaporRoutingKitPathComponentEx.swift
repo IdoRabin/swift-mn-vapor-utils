@@ -27,7 +27,7 @@ extension RoutingKit.PathComponent /* from array of strings */ {
     /// - Parameter strings: array of strings, will ignore strings sized 0 or larger than 1024 chars
     /// - Returns: an array of all valid path components created in the same orded as the input string array
     public static func arrays(fromPathStrings strings:[String])->[[PathComponent]] {
-        var result : [[PathComponent]] = strings.compactMap { str in
+        let result : [[PathComponent]] = strings.compactMap { str in
             if str.count > 0 && str.count < 1024 {
                 return str.pathComponents
             }

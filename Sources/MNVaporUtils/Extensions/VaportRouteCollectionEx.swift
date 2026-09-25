@@ -11,7 +11,7 @@ import Vapor
 public extension RouteCollection /* extension */ {
     
     // name allows to use in conincidence with the "tag" in OpenAPI to collate routes to groups
-    public var name : String {
+    var name : String {
         return "\(Self.self)".replacingOccurrences(ofFromTo: [
             "Controller":"",
             "Vapor":""

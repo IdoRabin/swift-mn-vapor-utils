@@ -111,7 +111,7 @@ public class MNRoutingHistoryItem : JSONSerializable, Hashable, CustomStringConv
             "status: \(lastStatus.reasonPhrase)"
         ]
         if let lastErrorStruct = lastErrorStruct {
-            strings.append("ERR: \(lastErrorStruct.error_code) \(lastErrorStruct.error_reason)")
+            strings.append("ERR: \(lastErrorStruct.error_code.descOrNil) \(lastErrorStruct.error_reason)")
         }
         if let lastRedirectedTo = lastRedirectedTo {
             strings.append("redirTo: \(lastRedirectedTo.shortDescription)")
@@ -247,7 +247,7 @@ public class MNRoutingHistoryItem : JSONSerializable, Hashable, CustomStringConv
             if let prev = prevErrorStruct {
                 self.lastErrorStruct?.update(underlyingErrorStructs: [prev])
             }
-            dlogVerbose?.info("--- updated lastError: \(newErrorStruct)")
+            dlogVerbose?.info("--- updated lastError: \(newErrorStruct.descOrNil)")
             wasChanged = true
         }
         

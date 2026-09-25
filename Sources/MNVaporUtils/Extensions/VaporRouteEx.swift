@@ -31,13 +31,13 @@ public extension Route {
     }
     
     // Properties
-    public var mnRouteInfo : MNRouteInfo? {
+    var mnRouteInfo : MNRouteInfo? {
         get {
             return self.userInfo[MN_ROUTE_INFO_KEY] as? MNRouteInfo
         }
     }
     
-    public var mnRouteGroup : MNRouteGroup? {
+    var mnRouteGroup : MNRouteGroup? {
         get {
             return self.userInfo[MN_ROUTE_GROUP_KEY] as? MNRouteGroup
         }

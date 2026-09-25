@@ -8,7 +8,6 @@
 import Foundation
 import Vapor
 import MNUtils
-import MNVaporUtils
 
 import Logging
  
@@ -19,7 +18,7 @@ let MN_ROUTE_GROUP_KEY = "mnRouteGroup"
 // NOTE: We are using a class because a single MNRouteGroup is shared between multiple routes, so we want to make sure
 //
 
-public class MNRouteGroup : Sendable, JSONSerializable, CustomDebugStringConvertible, Hashable {
+public class MNRouteGroup : @unchecked Sendable, JSONSerializable, CustomDebugStringConvertible, Hashable {
     
     // MARK: Types
     public typealias ProductType = MNRouteInfo.ProductType
@@ -31,7 +30,7 @@ public class MNRouteGroup : Sendable, JSONSerializable, CustomDebugStringConvert
     static let PATH_COMPS_FOR_TYPE  = [["api", "v1", "v2", "v3", "v4"]:ProductType.apiResponse,
                                        ["images", "css", "scripts", "web_scripts"]:ProductType.file]
     
-    private (set) public static var groups : [MNRouteGroupTag:MNRouteGroup] = [:]
+    private(set) public static var groups : [MNRouteGroupTag:MNRouteGroup] = [:]
     
     // MARK: Static
     
@@ -76,7 +75,7 @@ public class MNRouteGroup : Sendable, JSONSerializable, CustomDebugStringConvert
         }
         // dlog?.info("MNRouteGroup discovered majorityTypes: \(typesByTag.descriptionLines)")
         
-        for (atag, aroutes) in routesByTag {
+        for (atag, _ /*aroutes*/) in routesByTag {
             if result[atag] == nil {
                 let productType = typesByTag[atag] ?? .apiResponse
                 let baseTitle = atag.capitalized
@@ -110,9 +109,9 @@ public class MNRouteGroup : Sendable, JSONSerializable, CustomDebugStringConvert
                 if let newGroup = newGroups[info.groupTag] {
                     if MNUtils.debug.IS_DEBUG, let existingGroup = route.mnRouteGroup, existingGroup != newGroup {
                         dlog?.note("MNRouteGroup replacing:")
-                        dlog?.note("  EXISTING GROUP:\(existingGroup.serializeToJsonString(prettyPrint: true)))")
+                        dlog?.note("  EXISTING GROUP:\(existingGroup.serializeToJsonString(prettyPrint: true).descOrNil))")
                         
-                        dlog?.note("       NEW GROUP:\(newGroup.serializeToJsonString(prettyPrint: true))")
+                        dlog?.note("       NEW GROUP:\(newGroup.serializeToJsonString(prettyPrint: true).descOrNil)")
                     }
                     route.setMNRouteGroup(newGroup)
                     if let canonRoute = info.canonicalRoute {

@@ -24,7 +24,7 @@ public extension Vapor.Request /* App-specific components */ {
     static var appHasSessionMiddleware : Bool = true
     
     var domain : String? {
-        guard var host = url.host else {
+        guard let host = url.host else {
             return self.application.http.server.configuration.hostname
         }
         
@@ -58,7 +58,7 @@ public extension Vapor.Request /* App-specific components */ {
             return
         }
         guard "\(type(of: value))" != "\(Key.Value.self)" else {
-            dlog?.warning("saveToSessionStore will not encode:\(value) expected type: \(Key.Value.self)")
+            dlog?.warning("saveToSessionStore will not encode:\(value.descOrNil) expected type: \(Key.Value.self)")
             return
         }
         
